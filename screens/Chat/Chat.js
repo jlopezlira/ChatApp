@@ -12,9 +12,9 @@ import { signOut } from 'firebase/auth';
 import { auth, database } from '../../config/firebase';
 import { useNavigation } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
-import colors from '../../styles/colors';
+import { colors } from '../../styles/globals';
 
-export default function Chat() {
+const Chat = () => {
   const [messages, setMessages] = useState([]);
   const navigation = useNavigation();
 
@@ -37,7 +37,6 @@ export default function Chat() {
     const q = query(collectionRef, orderBy('createdAt', 'desc'));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      console.log('querySnapshot unsusbscribe');
       setMessages(
         querySnapshot.docs.map((doc) => ({
           _id: doc.data()._id,
@@ -64,23 +63,16 @@ export default function Chat() {
   }, []);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.white,
-      }}
-    >
+    <View className="flex-1 bg-white">
       <GiftedChat
         messages={messages}
         showAvatarForEveryMessage={false}
-        showUserAvatar={false}
         onSend={(messages) => onSend(messages)}
         messagesContainerStyle={{
           backgroundColor: colors.white,
         }}
         textInputStyle={{
           backgroundColor: colors.white,
-          borderRadius: 20,
         }}
         user={{
           _id: auth?.currentUser?.email,
@@ -89,4 +81,6 @@ export default function Chat() {
       />
     </View>
   );
-}
+};
+
+export default Chat;
